@@ -5,12 +5,14 @@ appdetails
 appids
 appinfo
 deno
+Flickr
 gpgarmor
 github
 githubassets
 https
 IPlayer
 ISteam
+joinmastodon
 leetcode
 MBTI
 Nie

@@ -270,6 +270,7 @@ jobs:
           token: ${{ secrets.METRICS_TOKEN }}
           base: repositories
           plugin_lines: yes
+          plugin_lines_delay: 30
           output_action: none
           delay: 120
           user: lowlighter
@@ -282,6 +283,7 @@ jobs:
           token: ${{ secrets.METRICS_TOKEN }}
           base: ""
           plugin_lines: yes
+          plugin_lines_delay: 30
           plugin_lines_sections: repositories, history
           plugin_lines_repositories_limit: 2
           plugin_lines_history_limit: 1
@@ -793,43 +795,6 @@ jobs:
           user: lowlighter
           plugins_errors_fatal: yes
         if: ${{ success() || failure() }}
-      - name: 🌇 GitHub Skyline - GitHub Skyline
-        uses: lowlighter/metrics@master
-        with:
-          filename: metrics.plugin.skyline.svg
-          token: NOT_NEEDED
-          base: ""
-          plugin_skyline: yes
-          plugin_skyline_year: 2020
-          plugin_skyline_frames: 6
-          plugin_skyline_quality: 1
-          output_action: none
-          delay: 120
-          user: lowlighter
-          plugins_errors_fatal: yes
-        if: ${{ success() || failure() }}
-      - name: 🌇 GitHub Skyline - GitHub City
-        uses: lowlighter/metrics@master
-        with:
-          filename: metrics.plugin.skyline.city.svg
-          token: NOT_NEEDED
-          base: ""
-          plugin_skyline: yes
-          plugin_skyline_year: 2020
-          plugin_skyline_frames: 6
-          plugin_skyline_quality: 1
-          plugin_skyline_settings: |
-            {
-              "url": "https://honzaap.github.io/GithubCity?name=${login}&year=${year}",
-              "ready": "[...document.querySelectorAll('.display-info span')].map(span => span.innerText).includes('${login}')",
-              "wait": 4,
-              "hide": ".github-corner, .footer-link, .buttons-options, .mobile-rotate, .display-info span:first-child"
-            }
-          output_action: none
-          delay: 120
-          user: lowlighter
-          plugins_errors_fatal: yes
-        if: ${{ success() || failure() }}
       - name: ⏱️ Google PageSpeed - Succinct report
         uses: lowlighter/metrics@master
         with:
@@ -869,36 +834,6 @@ jobs:
           plugin_pagespeed_screenshot: yes
           plugin_pagespeed_token: ${{ secrets.PAGESPEED_TOKEN }}
           plugin_pagespeed_url: https://lecoq.io
-          output_action: none
-          delay: 120
-          user: lowlighter
-          plugins_errors_fatal: yes
-        if: ${{ success() || failure() }}
-      - name: 🐤 Latest tweets - Latest tweets
-        uses: lowlighter/metrics@master
-        with:
-          filename: metrics.plugin.tweets.svg
-          token: NOT_NEEDED
-          base: ""
-          plugin_tweets: yes
-          plugin_tweets_token: ${{ secrets.TWITTER_TOKEN }}
-          plugin_tweets_user: github
-          output_action: none
-          delay: 120
-          user: lowlighter
-          plugins_errors_fatal: yes
-        if: ${{ success() || failure() }}
-      - name: 🐤 Latest tweets - Latest tweets including attachments
-        uses: lowlighter/metrics@master
-        with:
-          filename: metrics.plugin.tweets.attachments.svg
-          token: NOT_NEEDED
-          base: ""
-          plugin_tweets: yes
-          plugin_tweets_token: ${{ secrets.TWITTER_TOKEN }}
-          plugin_tweets_attachments: yes
-          plugin_tweets_user: github
-          plugin_tweets_limit: 1
           output_action: none
           delay: 120
           user: lowlighter
@@ -1305,11 +1240,6 @@ jobs:
           plugin_rss: yes
           plugin_rss_source: https://news.ycombinator.com/rss
           plugin_rss_limit: 4
-          plugin_tweets: yes
-          plugin_tweets_token: ${{ secrets.TWITTER_TOKEN }}
-          plugin_tweets_user: github
-          plugin_tweets_attachments: yes
-          plugin_tweets_limit: 2
           plugin_topics: yes
           plugin_topics_limit: 24
           plugin_isocalendar: yes

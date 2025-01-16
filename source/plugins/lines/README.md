@@ -99,6 +99,23 @@ All product and company names are trademarks™ or registered® trademarks of th
 <b>zero behaviour:</b> disable</br>
 <b>default:</b> 1<br></td>
   </tr>
+  <tr>
+    <td nowrap="nowrap"><h4><code>plugin_lines_delay</code></h4></td>
+    <td rowspan="2"><p>Delay before performing a second query</p>
+<p>When non-zero, will perform a second query after specified delay (in seconds).
+The GitHub endpoint used may return inaccurate results on first query (these values seems to be cached on the fly),
+after returning correct results upon performing another query.</p>
+<p>Using this option may mitigate the occurrence of weird values.</p>
+<img width="900" height="1" alt=""></td>
+  </tr>
+  <tr>
+    <td nowrap="nowrap"><b>type:</b> <code>number</code>
+<i>(0 ≤
+𝑥)</i>
+<br>
+<b>zero behaviour:</b> disable</br>
+<b>default:</b> 0<br></td>
+  </tr>
 </table>
 <!--/options-->
 
@@ -113,6 +130,7 @@ with:
   token: ${{ secrets.METRICS_TOKEN }}
   base: repositories
   plugin_lines: yes
+  plugin_lines_delay: 30
 
 ```
 ```yaml
@@ -123,6 +141,7 @@ with:
   token: ${{ secrets.METRICS_TOKEN }}
   base: ""
   plugin_lines: yes
+  plugin_lines_delay: 30
   plugin_lines_sections: repositories, history
   plugin_lines_repositories_limit: 2
   plugin_lines_history_limit: 1

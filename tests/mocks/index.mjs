@@ -64,21 +64,27 @@ export default async function({graphql, rest}) {
   {
     //Unmocked
     console.debug("metrics/compute/mocks > mocking rest api")
-    const unmocked = {}
+    const unmocked = rest
+
     //Mocked
-    const mocker = ({path = "rest", mocks, mocked}) => {
-      for (const [key, value] of Object.entries(mocks)) {
-        console.debug(`metrics/compute/mocks > mocking rest api > mocking ${path}.${key}`)
-        if (typeof value === "function") {
-          unmocked[path] = value
-          mocked[key] = new Proxy(unmocked[path], {apply: value.bind(null, {faker})})
+    rest = new Proxy(unmocked, {
+      get(target, section) {
+        if (Reflect.has(mocks.github.rest, section)) {
+          return new Proxy(target[section], {
+            get(target, property) {
+              if (mocks.github.rest?.[section]?.[property]) {
+                return async function() {
+                  console.debug(`metrics/mocking > rest.${section}.${property}`)
+                  return mocks.github.rest[section][property]({faker}, target, null, arguments)
+                }
+              }
+              return Reflect.get(target, property)
+            },
+          })
         }
-        else {
-          mocker({path: `${path}.${key}`, mocks: mocks[key], mocked: mocked[key]})
-        }
-      }
-    }
-    mocker({mocks: mocks.github.rest, mocked: rest})
+        return Reflect.get(target, section)
+      },
+    })
   }
 
   //Axios mocking
@@ -155,10 +161,10 @@ export default async function({graphql, rest}) {
     //Mock geocode API
     Gmap.prototype.geocode = function() {
       console.debug("metrics/compute/mocks > mocking google maps geocode result")
-      const lat = faker.address.latitude()
-      const lng = faker.address.longitude()
-      const city = faker.address.city()
-      const country = faker.address.country()
+      const lat = faker.location.latitude()
+      const lng = faker.location.longitude()
+      const city = faker.location.city()
+      const country = faker.location.country()
       return {
         data: {
           results: [
@@ -171,7 +177,7 @@ export default async function({graphql, rest}) {
                 },
                 {
                   long_name: country,
-                  short_name: faker.address.countryCode(),
+                  short_name: faker.location.countryCode(),
                   types: ["country", "political"],
                 },
               ],
